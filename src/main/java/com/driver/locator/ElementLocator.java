@@ -42,28 +42,28 @@ public class ElementLocator {
 		Attributes aAttributes = bElement.attributes();
 		
 		if( !aAttributes.get(LOCATOR_ID).isEmpty() && isUnique(aDriver, By.id(aAttributes.get(LOCATOR_ID)))){
-			return "Id : " + aAttributes.get(LOCATOR_ID);
+			return "Id:" + aAttributes.get(LOCATOR_ID);
 		}else if( !aAttributes.get(LOCATOR_CLASS).isEmpty() && isUnique(aDriver, By.className(aAttributes.get(LOCATOR_CLASS)))){
-			return "Class Name : " + aAttributes.get(LOCATOR_CLASS);
+			return "Class Name:" + aAttributes.get(LOCATOR_CLASS);
 		}else if( !aAttributes.get(LOCATOR_NAME).isEmpty() && isUnique(aDriver, By.name(aAttributes.get(LOCATOR_NAME)))){
-			return "Name : " + aAttributes.get(LOCATOR_NAME);
+			return "Name:" + aAttributes.get(LOCATOR_NAME);
 		}else if(bElement.hasText()){
 			String xPath = "//" + bElement.nodeName() + "[normalize-space(text())='" + bElement.ownText().trim() + "']";
 			if (isUnique(aDriver, By.xpath(xPath))){
-				return "Xpath : " + xPath;
+				return "Xpath:" + xPath;
 			}
 		}
 		return "No Unique Locator";
 		
 	}
 	
-	private String[] getElementsByTag(String tagName,WebDriver aDriver){
+	private List<String> getElementsByTag(String tagName,WebDriver aDriver){
 		Elements eleList = dDocument.getElementsByTag(tagName);
-		String locator[] = new String[eleList.size()];
+		List<String> locator = new ArrayList<String>();
 		for (int i = 0; i < eleList.size(); i++) {
-			locator[i] = getUniqueLocator(aDriver, eleList.get(i));
+			locator.add(getUniqueLocator(aDriver, eleList.get(i)));
 		}
-		return locator.length == 0 ? null : locator ;
+		return locator;
 	}
 	
 	private boolean isUnique(WebDriver driver,By locator) {
@@ -75,13 +75,13 @@ public class ElementLocator {
 		
 	}
 	
-	public List<String[]> getLocator(WebDriver aDriver){
-		List<String[]> locatorList = new ArrayList<String[]>();
-		locatorList.add(getElementsByTag(TAG_LINK, aDriver));
-		locatorList.add(getElementsByTag(TAG_BUTTON, aDriver));
-		locatorList.add(getElementsByTag(TAG_DROP_DOWN, aDriver));
-		locatorList.add(getElementsByTag(TAG_INPUT, aDriver));
-		locatorList.add(getElementsByTag(TAG_TEXT_AREA, aDriver));
+	public List<String> getLocator(WebDriver aDriver){
+		List<String> locatorList = new ArrayList<String>();
+		locatorList.addAll(getElementsByTag(TAG_LINK, aDriver));
+		locatorList.addAll(getElementsByTag(TAG_BUTTON, aDriver));
+		locatorList.addAll(getElementsByTag(TAG_DROP_DOWN, aDriver));
+		locatorList.addAll(getElementsByTag(TAG_INPUT, aDriver));
+		locatorList.addAll(getElementsByTag(TAG_TEXT_AREA, aDriver));
 		locatorList.removeIf(new NullRemove());
 		return locatorList;
 		
@@ -97,9 +97,12 @@ public class ElementLocator {
 		}
 	}
 	
-	private boolean writeToCsvFile(List<String[]> dData){
+	private boolean writeToCsvFile(List<String> dData){
 		try (CSVWriter writer = new CSVWriter(new FileWriter(ResourceHelper.getResourcePath("locator/") + "Page_"+ (COUNTER++) + ".csv",false),',')){
-			writer.writeAll(dData);
+				for (String string : dData) {
+					String[] str = string.split(":");
+					writer.writeNext(str, false);
+				}
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
