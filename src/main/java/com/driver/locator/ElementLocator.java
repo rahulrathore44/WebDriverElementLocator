@@ -98,7 +98,7 @@ public class ElementLocator {
 	}
 	
 	private boolean writeToCsvFile(List<String[]> dData){
-		try (CSVWriter writer = new CSVWriter(new FileWriter(ResourceHelper.getResourcePath("locator/") + "Page_"+ (COUNTER++) + ".csv",true),',')){
+		try (CSVWriter writer = new CSVWriter(new FileWriter(ResourceHelper.getResourcePath("locator/") + "Page_"+ (COUNTER++) + ".csv",false),',')){
 			writer.writeAll(dData);
 			return true;
 		} catch (Exception e) {
