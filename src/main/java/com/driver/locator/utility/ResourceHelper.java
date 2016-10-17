@@ -19,11 +19,13 @@ public class ResourceHelper {
 
 	public static String getResourcePath(String resource) {
 		String path = getBaseResourcePath() + resource;
+		System.out.println(path);
 		return path;
 	}
 	
 	public static String getBaseResourcePath() {
 		String path = ResourceHelper.class.getClass().getResource("/").getPath();
+		System.out.println(path);
 		return path;
 	}
 	

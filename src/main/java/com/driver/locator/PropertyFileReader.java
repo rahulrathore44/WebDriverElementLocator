@@ -11,7 +11,7 @@ public class PropertyFileReader {
 	private String bFileName = "";
 	
 	private String getFilePath(){
-		return this.getClass().getResource("/").getPath() + "resources/configfile/" + this.bFileName;
+		return this.getClass().getResource("/").getPath() + "configfile/" + this.bFileName;
 	}
 	
 	public PropertyFileReader() {
@@ -19,7 +19,7 @@ public class PropertyFileReader {
 		
 		try {
 				aProperty = new Properties();
-				aProperty.load(ResourceHelper.getResourcePathInputStream("resources/configfile/" + this.bFileName));
+				aProperty.load(ResourceHelper.getResourcePathInputStream("configfile/" + this.bFileName));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
