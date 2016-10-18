@@ -3,10 +3,12 @@ package com.driver.locator;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,7 +17,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-import com.driver.locator.PropertyFileReader;
+import com.driver.locator.model.IgnoreAttribute;
 import com.driver.locator.utility.NullRemove;
 import com.driver.locator.utility.ResourceHelper;
 import com.opencsv.CSVWriter;
@@ -38,6 +40,22 @@ public class ElementLocator {
 	private static final String LOCATOR_NAME = "name";
 	private static int COUNTER = 1;
 	
+	private String getXpath(WebDriver aDriver,Element bElement){
+		Iterator<Attribute> attIterator = bElement.attributes().iterator();
+		String locator = "";
+		
+		while (attIterator.hasNext()) {
+			Attribute attribute = (Attribute) attIterator.next();
+			if(IgnoreAttribute.ignoreAttribute.contains(attribute.getKey()))
+				continue;
+			locator = "//" + bElement.nodeName() + "[@" + attribute.getKey() + "='" + attribute.getValue() + "']";
+			if(isUnique(aDriver, By.xpath(locator)))
+				break;
+		}
+		
+		return locator.length() == 0 ? "No Unique Locator" : "Xpath:" + locator;
+	}
+	
 	private String getUniqueLocator(WebDriver aDriver,Element bElement) {
 		Attributes aAttributes = bElement.attributes();
 		
@@ -53,7 +71,7 @@ public class ElementLocator {
 				return "Xpath:" + xPath;
 			}
 		}
-		return "No Unique Locator";
+		return  getXpath(dDriver,bElement);
 		
 	}
 	
@@ -77,12 +95,12 @@ public class ElementLocator {
 	
 	public List<String> getLocator(WebDriver aDriver){
 		List<String> locatorList = new ArrayList<String>();
-		locatorList.addAll(getElementsByTag(TAG_LINK, aDriver));
-		locatorList.addAll(getElementsByTag(TAG_BUTTON, aDriver));
-		locatorList.addAll(getElementsByTag(TAG_DROP_DOWN, aDriver));
-		locatorList.addAll(getElementsByTag(TAG_INPUT, aDriver));
-		locatorList.addAll(getElementsByTag(TAG_TEXT_AREA, aDriver));
-		locatorList.removeIf(new NullRemove());
+			locatorList.addAll(getElementsByTag(TAG_LINK, aDriver));
+			locatorList.addAll(getElementsByTag(TAG_BUTTON, aDriver));
+			locatorList.addAll(getElementsByTag(TAG_DROP_DOWN, aDriver));
+			locatorList.addAll(getElementsByTag(TAG_INPUT, aDriver));
+			locatorList.addAll(getElementsByTag(TAG_TEXT_AREA, aDriver));
+			locatorList.removeIf(new NullRemove());
 		return locatorList;
 		
 	}
@@ -123,7 +141,6 @@ public class ElementLocator {
 		}
 		if(this.dDriver != null)
 			dDriver.quit();
-		
 	}
 	
 
