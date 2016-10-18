@@ -1,6 +1,9 @@
 package com.driver.locator;
 
 import java.io.FileInputStream;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import com.driver.locator.utility.ResourceHelper;
@@ -36,7 +39,13 @@ public class PropertyFileReader {
 		}
 	}
 	
-	public String[] getWebsiteNames() {
-		return aProperty.getProperty("Website").split(",");
+	public Map<String,String> getWebsiteNames() {
+		Enumeration<Object> keys = aProperty.keys();
+		Map<String, String> urlMap = new LinkedHashMap<String, String>();
+		while (keys.hasMoreElements()) {
+			Object object = (Object) keys.nextElement();
+			urlMap.put(object.toString(), aProperty.getProperty(object.toString()));
+		}
+		return urlMap;
 	}
 }

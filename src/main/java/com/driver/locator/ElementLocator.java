@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
@@ -38,7 +39,6 @@ public class ElementLocator {
 	private static final String LOCATOR_ID = "id";
 	private static final String LOCATOR_CLASS = "class";
 	private static final String LOCATOR_NAME = "name";
-	private static int COUNTER = 1;
 	
 	private String getXpath(WebDriver aDriver,Element bElement){
 		Iterator<Attribute> attIterator = bElement.attributes().iterator();
@@ -46,11 +46,12 @@ public class ElementLocator {
 		
 		while (attIterator.hasNext()) {
 			Attribute attribute = (Attribute) attIterator.next();
-			if(IgnoreAttribute.ignoreAttribute.contains(attribute.getKey()))
+			if(IgnoreAttribute.ignoreAttribute.contains(attribute.getKey()) || attribute.getValue().isEmpty()) 
 				continue;
 			locator = "//" + bElement.nodeName() + "[@" + attribute.getKey() + "='" + attribute.getValue() + "']";
 			if(isUnique(aDriver, By.xpath(locator)))
 				break;
+			locator = "";
 		}
 		
 		return locator.length() == 0 ? "No Unique Locator" : "Xpath:" + locator;
@@ -115,8 +116,8 @@ public class ElementLocator {
 		}
 	}
 	
-	private boolean writeToCsvFile(List<String> dData){
-		try (CSVWriter writer = new CSVWriter(new FileWriter(ResourceHelper.getResourcePath("locator/") + "Page_"+ (COUNTER++) + ".csv",false),',')){
+	private boolean writeToCsvFile(String fileName,List<String> dData){
+		try (CSVWriter writer = new CSVWriter(new FileWriter(ResourceHelper.getResourcePath("locator/") + fileName + ".csv",false),',')){
 				for (String string : dData) {
 					String[] str = string.split(":");
 					writer.writeNext(str, false);
@@ -135,9 +136,10 @@ public class ElementLocator {
 	}
 		
 	public void generateLocator() {
-		for (String website : rReader.getWebsiteNames()) {
-			openPage(website);
-			writeToCsvFile(getLocator(this.dDriver));
+		Map<String, String> urlMap = rReader.getWebsiteNames();
+		for (String websiteKey : urlMap.keySet()) {
+			openPage(urlMap.get(websiteKey));
+			writeToCsvFile(websiteKey,getLocator(this.dDriver));
 		}
 		if(this.dDriver != null)
 			dDriver.quit();

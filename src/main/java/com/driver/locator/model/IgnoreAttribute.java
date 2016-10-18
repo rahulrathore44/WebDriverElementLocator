@@ -14,7 +14,8 @@ public class IgnoreAttribute {
 		"alt",
 		"style",
 		"disabled",
-		"target"
+		"target",
+		"rel"
 	});
 
 }
