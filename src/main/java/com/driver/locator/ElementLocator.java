@@ -1,6 +1,5 @@
 package com.driver.locator;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,8 +20,11 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import com.driver.locator.model.IgnoreAttribute;
 import com.driver.locator.model.LocatorModel;
 import com.driver.locator.utility.NullRemove;
-import com.driver.locator.utility.ResourceHelper;
-import com.opencsv.CSVWriter;
+import com.driver.locator.writer.CsvFileWriter;
+import com.driver.locator.writer.ExcelFileWriter;
+import com.driver.locator.writer.FileType;
+import com.driver.locator.writer.FileWrite;
+import com.driver.locator.writer.ObjectFactory;
 
 public class ElementLocator {
 	
@@ -116,30 +118,51 @@ public class ElementLocator {
 		}
 	}
 	
-	private boolean writeToCsvFile(String fileName,List<LocatorModel> dData){
-		try (CSVWriter writer = new CSVWriter(new FileWriter(ResourceHelper.getResourcePath("locator/") + fileName + ".csv",false),',')){
-				for (LocatorModel model : dData) {
-					String[] str = model.toString().split(":");
-					writer.writeNext(str, false);
-				}
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
 	public ElementLocator() {
 		rReader = new PropertyFileReader();
 		dDriver = new HtmlUnitDriver();
 		dDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
 	}
-		
-	public void generateLocator() {
+	
+	/**
+	 * Generate the locator and write to the file
+	 * @param type
+	 */
+	public void writeToFile(FileType type) {
+		FileWrite writer = ObjectFactory.getObject(type);
 		Map<String, String> urlMap = rReader.getWebsiteNames();
 		for (String websiteKey : urlMap.keySet()) {
 			openPage(urlMap.get(websiteKey));
-			writeToCsvFile(websiteKey,getLocator(this.dDriver));
+			writer.writeToFile(websiteKey,getLocator(this.dDriver));
+		}
+		if(this.dDriver != null)
+			dDriver.quit();
+	}
+	
+	/**
+	 * Generate the locator in Csv File 
+	 */
+	public void generateCsvLocator() {
+		CsvFileWriter writer = new CsvFileWriter();
+		Map<String, String> urlMap = rReader.getWebsiteNames();
+		for (String websiteKey : urlMap.keySet()) {
+			openPage(urlMap.get(websiteKey));
+			//writer.writeToCsvFile(websiteKey,getLocator(this.dDriver));
+		}
+		if(this.dDriver != null)
+			dDriver.quit();
+	}
+	
+	
+	/**
+	 * Generate the locator in Excel file 
+	 */
+	public void generateExcelLocator() {
+		ExcelFileWriter writer = new ExcelFileWriter();
+		Map<String, String> urlMap = rReader.getWebsiteNames();
+		for (String websiteKey : urlMap.keySet()) {
+			openPage(urlMap.get(websiteKey));
+			//writer.wrtiteToExcelFile(websiteKey,getLocator(this.dDriver));
 		}
 		if(this.dDriver != null)
 			dDriver.quit();
