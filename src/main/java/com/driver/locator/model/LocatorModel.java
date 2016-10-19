@@ -18,5 +18,10 @@ public class LocatorModel {
 		this.locatorValue = locatorValue;
 	}
 	
+	@Override
+	public String toString() {
+		return locatorType + ":" + locatorValue;
+	}
+	
 
 }

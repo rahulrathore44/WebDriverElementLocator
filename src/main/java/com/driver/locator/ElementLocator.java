@@ -19,6 +19,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import com.driver.locator.model.IgnoreAttribute;
+import com.driver.locator.model.LocatorModel;
 import com.driver.locator.utility.NullRemove;
 import com.driver.locator.utility.ResourceHelper;
 import com.opencsv.CSVWriter;
@@ -40,7 +41,7 @@ public class ElementLocator {
 	private static final String LOCATOR_CLASS = "class";
 	private static final String LOCATOR_NAME = "name";
 	
-	private String getXpath(WebDriver aDriver,Element bElement){
+	private LocatorModel getXpath(WebDriver aDriver,Element bElement){
 		Iterator<Attribute> attIterator = bElement.attributes().iterator();
 		String locator = "";
 		
@@ -53,32 +54,31 @@ public class ElementLocator {
 				break;
 			locator = "";
 		}
-		
-		return locator.length() == 0 ? "No Unique Locator" : "Xpath:" + locator;
+		return locator.length() == 0 ? new LocatorModel("No Unique Attribute", "No Unique Locator") : new LocatorModel("Xpath", locator);
 	}
 	
-	private String getUniqueLocator(WebDriver aDriver,Element bElement) {
+	private LocatorModel getUniqueLocator(WebDriver aDriver,Element bElement) {
 		Attributes aAttributes = bElement.attributes();
 		
 		if( !aAttributes.get(LOCATOR_ID).isEmpty() && isUnique(aDriver, By.id(aAttributes.get(LOCATOR_ID)))){
-			return "Id:" + aAttributes.get(LOCATOR_ID);
+			return new LocatorModel(LOCATOR_ID, aAttributes.get(LOCATOR_ID));
 		}else if( !aAttributes.get(LOCATOR_CLASS).isEmpty() && isUnique(aDriver, By.className(aAttributes.get(LOCATOR_CLASS)))){
-			return "Class Name:" + aAttributes.get(LOCATOR_CLASS);
+			return new LocatorModel(LOCATOR_CLASS, aAttributes.get(LOCATOR_CLASS));
 		}else if( !aAttributes.get(LOCATOR_NAME).isEmpty() && isUnique(aDriver, By.name(aAttributes.get(LOCATOR_NAME)))){
-			return "Name:" + aAttributes.get(LOCATOR_NAME);
+			return new LocatorModel(LOCATOR_NAME, aAttributes.get(LOCATOR_NAME));
 		}else if(bElement.hasText()){
 			String xPath = "//" + bElement.nodeName() + "[normalize-space(text())='" + bElement.ownText().trim() + "']";
 			if (isUnique(aDriver, By.xpath(xPath))){
-				return "Xpath:" + xPath;
+				return new LocatorModel("Xpath", xPath);
 			}
 		}
 		return  getXpath(dDriver,bElement);
 		
 	}
 	
-	private List<String> getElementsByTag(String tagName,WebDriver aDriver){
+	private List<LocatorModel> getElementsByTag(String tagName,WebDriver aDriver){
 		Elements eleList = dDocument.getElementsByTag(tagName);
-		List<String> locator = new ArrayList<String>();
+		List<LocatorModel> locator = new ArrayList<LocatorModel>();
 		for (int i = 0; i < eleList.size(); i++) {
 			locator.add(getUniqueLocator(aDriver, eleList.get(i)));
 		}
@@ -94,8 +94,8 @@ public class ElementLocator {
 		
 	}
 	
-	public List<String> getLocator(WebDriver aDriver){
-		List<String> locatorList = new ArrayList<String>();
+	public List<LocatorModel> getLocator(WebDriver aDriver){
+		List<LocatorModel> locatorList = new ArrayList<LocatorModel>();
 			locatorList.addAll(getElementsByTag(TAG_LINK, aDriver));
 			locatorList.addAll(getElementsByTag(TAG_BUTTON, aDriver));
 			locatorList.addAll(getElementsByTag(TAG_DROP_DOWN, aDriver));
@@ -116,10 +116,10 @@ public class ElementLocator {
 		}
 	}
 	
-	private boolean writeToCsvFile(String fileName,List<String> dData){
+	private boolean writeToCsvFile(String fileName,List<LocatorModel> dData){
 		try (CSVWriter writer = new CSVWriter(new FileWriter(ResourceHelper.getResourcePath("locator/") + fileName + ".csv",false),',')){
-				for (String string : dData) {
-					String[] str = string.split(":");
+				for (LocatorModel model : dData) {
+					String[] str = model.toString().split(":");
 					writer.writeNext(str, false);
 				}
 			return true;
