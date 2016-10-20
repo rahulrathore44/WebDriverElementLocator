@@ -19,12 +19,12 @@ If the locator is unique then it is saved in Csv/Excel file.
 
 ### The script create the Csv/Excel file with name as key from config.properties 
 
-#Comma seperated file
+####Comma seperated file
 
 ![Csv]
 (https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/Csv.PNG)
 
-#Excel file
+####Excel file
 
 ![Excel]
 (https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/Excel.PNG) 
