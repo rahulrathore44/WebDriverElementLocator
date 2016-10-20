@@ -1,5 +1,7 @@
 package com.driver.locator.writer;
 
+import com.driver.locator.writer.gson.JsonFileWrite;
+
 public class ObjectFactory {
 	
 	public static FileWrite getObject(FileType type) {
@@ -9,6 +11,9 @@ public class ObjectFactory {
 
 		case Csv:
 			return new CsvFileWriter();
+			
+		case Json:
+			return new JsonFileWrite();
 		}
 		throw new RuntimeException("Cannot create Object");
 	}
