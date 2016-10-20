@@ -3,7 +3,7 @@
 
 Automated approach to extract object properties. The script extracts the web element locator,
 By going to each page and validating the locator is unique or not.
-If the locator is unique then it is saved in Csv/Excel file.
+If the locator is unique then it is saved in Csv/Excel/Json file.
 
 ### List of Urls must be specified in the config.properties file:
 
@@ -17,7 +17,7 @@ If the locator is unique then it is saved in Csv/Excel file.
 
 `mvn clean generate-sources install`
 
-### The script create the Csv/Excel file with name as key from config.properties 
+### The script create the Csv/Excel/Json file with name as key from config.properties 
 
 `Comma separated file`
 
