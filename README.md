@@ -2,7 +2,7 @@
 
 
 Automated approach to extract object properties. The script extracts the web element locator,
-By going to each pages and validating the locator is unique or not.
+By going to each page and validating the locator is unique or not.
 If the locator is unique then it is saved in Csv/Excel file.
 
 ### List of Urls must be specified in the config.properties file:
@@ -19,12 +19,12 @@ If the locator is unique then it is saved in Csv/Excel file.
 
 ### The script create the Csv/Excel file with name as key from config.properties 
 
-Comma seperated file
+#Comma seperated file
 
 ![Csv]
 (https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/Csv.PNG)
 
-Excel file
+#Excel file
 
 ![Excel]
 (https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/Excel.PNG) 
