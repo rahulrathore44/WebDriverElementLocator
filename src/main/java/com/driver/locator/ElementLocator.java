@@ -20,8 +20,6 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import com.driver.locator.model.IgnoreAttribute;
 import com.driver.locator.model.LocatorModel;
 import com.driver.locator.utility.NullRemove;
-import com.driver.locator.writer.CsvFileWriter;
-import com.driver.locator.writer.ExcelFileWriter;
 import com.driver.locator.writer.FileType;
 import com.driver.locator.writer.FileWrite;
 import com.driver.locator.writer.ObjectFactory;
@@ -138,35 +136,5 @@ public class ElementLocator {
 		if(this.dDriver != null)
 			dDriver.quit();
 	}
-	
-	/**
-	 * Generate the locator in Csv File 
-	 */
-	public void generateCsvLocator() {
-		CsvFileWriter writer = new CsvFileWriter();
-		Map<String, String> urlMap = rReader.getWebsiteNames();
-		for (String websiteKey : urlMap.keySet()) {
-			openPage(urlMap.get(websiteKey));
-			//writer.writeToCsvFile(websiteKey,getLocator(this.dDriver));
-		}
-		if(this.dDriver != null)
-			dDriver.quit();
-	}
-	
-	
-	/**
-	 * Generate the locator in Excel file 
-	 */
-	public void generateExcelLocator() {
-		ExcelFileWriter writer = new ExcelFileWriter();
-		Map<String, String> urlMap = rReader.getWebsiteNames();
-		for (String websiteKey : urlMap.keySet()) {
-			openPage(urlMap.get(websiteKey));
-			//writer.wrtiteToExcelFile(websiteKey,getLocator(this.dDriver));
-		}
-		if(this.dDriver != null)
-			dDriver.quit();
-	}
-	
 
 }
