@@ -36,27 +36,12 @@ public class ElementLocator {
 	private static final String TAG_INPUT = "input";
 	private static final String TAG_DROP_DOWN = "select";
 	private static final String TAG_TEXT_AREA = "textarea";
+	private static final String TAG_SPAN = "span";
 	
 	private static int REC_COUNT = 1;
 	private static final String LOCATOR_ID = "id";
 	private static final String LOCATOR_CLASS = "class";
 	private static final String LOCATOR_NAME = "name";
-	
-	/*private LocatorModel getXpath(WebDriver aDriver,Element bElement){
-		Iterator<Attribute> attIterator = bElement.attributes().iterator();
-		String locator = "";
-		
-		while (attIterator.hasNext()) {
-			Attribute attribute = (Attribute) attIterator.next();
-			if(IgnoreAttribute.ignoreAttribute.contains(attribute.getKey()) || attribute.getValue().isEmpty()) 
-				continue;
-			locator = "//" + bElement.nodeName() + "[@" + attribute.getKey() + "='" + attribute.getValue() + "']";
-			if(isUnique(aDriver, By.xpath(locator)))
-				break;
-			locator = "";
-		}
-		return locator.length() == 0 ? new LocatorModel("No Unique Attribute", "No Unique Locator") : new LocatorModel("Xpath", locator);
-	}*/
 	
 	private LocatorModel getXpath(WebDriver aDriver,Element bElement,List<String> locatorList){
 		boolean flag = true;
@@ -65,7 +50,7 @@ public class ElementLocator {
 		ArrayList<String> locatorArrayList = new ArrayList<String>();
 		
 		if(REC_COUNT == 5 || bElement == null || locatorList.isEmpty())
-			return new LocatorModel("NoUniqueType", "NoUniqueType");
+			return null;
 		
 		REC_COUNT++;
 		
@@ -169,6 +154,7 @@ public class ElementLocator {
 			locatorList.addAll(getElementsByTag(TAG_DROP_DOWN, aDriver));
 			locatorList.addAll(getElementsByTag(TAG_INPUT, aDriver));
 			locatorList.addAll(getElementsByTag(TAG_TEXT_AREA, aDriver));
+			locatorList.addAll(getElementsByTag(TAG_SPAN, aDriver));
 			locatorList.removeIf(new NullRemove());
 		return locatorList;
 		
