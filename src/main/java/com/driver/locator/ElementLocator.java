@@ -2,6 +2,7 @@ package com.driver.locator;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -36,12 +37,12 @@ public class ElementLocator {
 	private static final String TAG_DROP_DOWN = "select";
 	private static final String TAG_TEXT_AREA = "textarea";
 	
-	
+	private static int REC_COUNT = 1;
 	private static final String LOCATOR_ID = "id";
 	private static final String LOCATOR_CLASS = "class";
 	private static final String LOCATOR_NAME = "name";
 	
-	private LocatorModel getXpath(WebDriver aDriver,Element bElement){
+	/*private LocatorModel getXpath(WebDriver aDriver,Element bElement){
 		Iterator<Attribute> attIterator = bElement.attributes().iterator();
 		String locator = "";
 		
@@ -55,6 +56,73 @@ public class ElementLocator {
 			locator = "";
 		}
 		return locator.length() == 0 ? new LocatorModel("No Unique Attribute", "No Unique Locator") : new LocatorModel("Xpath", locator);
+	}*/
+	
+	private LocatorModel getXpath(WebDriver aDriver,Element bElement,List<String> locatorList){
+		boolean flag = true;
+		String locator = "";
+		Iterator<Attribute> attIterator = bElement.attributes().iterator();
+		ArrayList<String> locatorArrayList = new ArrayList<String>();
+		
+		if(REC_COUNT == 5 || bElement == null || locatorList.isEmpty())
+			return new LocatorModel("NoUniqueType", "NoUniqueType");
+		
+		REC_COUNT++;
+		
+		while (attIterator.hasNext()) {
+			Attribute attribute = (Attribute) attIterator.next();
+			if(IgnoreAttribute.ignoreAttribute.contains(attribute.getKey()) || attribute.getValue().isEmpty()) 
+				continue;
+			for(String s : locatorList){
+				locator = "//" + bElement.nodeName() + "[@" + attribute.getKey() + "='" + attribute.getValue() + "']" + s;
+				locatorArrayList.add(locator);
+				if(isUnique(aDriver, By.xpath(locator))){
+					flag = false;
+					break;
+				}
+				locator = "";
+			}
+			if(!flag)
+				break;
+		}
+		
+		if(locatorArrayList.isEmpty()){
+			for(String s : locatorList){
+				locator = "//" + bElement.nodeName() + s;
+				locatorArrayList.add(locator);
+				if(isUnique(aDriver, By.xpath(locator)))
+					break;
+				locator = "";
+			}
+		}
+		
+		return locator.length() == 0 ? 
+				getXpath(aDriver,bElement.parent(),locatorArrayList) : 
+					new LocatorModel("Xpath", locator);
+	}
+	
+	
+	private LocatorModel getXpath(WebDriver aDriver,Element bElement){
+		REC_COUNT = 1;
+		String locator = "";
+		Iterator<Attribute> attIterator = bElement.attributes().iterator();
+		ArrayList<String> locatorList = new ArrayList<String>();
+		
+		while (attIterator.hasNext()) {
+			Attribute attribute = (Attribute) attIterator.next();
+			if(IgnoreAttribute.ignoreAttribute.contains(attribute.getKey()) || attribute.getValue().isEmpty()) 
+				continue;
+			locator = "//" + bElement.nodeName() + "[@" + attribute.getKey() + "='" + attribute.getValue() + "']";
+			locatorList.add(locator);
+			if(isUnique(aDriver, By.xpath(locator)))
+				break;
+			locator = "";
+		}
+		
+		return locator.length() == 0 ? 
+				getXpath(aDriver,bElement.parent(),locatorList.isEmpty() ? 
+						new ArrayList<String>(Arrays.asList("//" + bElement.nodeName())) : locatorList) 
+						: new LocatorModel("Xpath", locator);
 	}
 	
 	private LocatorModel getUniqueLocator(WebDriver aDriver,Element bElement) {
