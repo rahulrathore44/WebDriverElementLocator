@@ -165,6 +165,7 @@ public class ElementLocator {
 			dDocument = Jsoup.connect(url).get();
 			dDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
 			dDriver.get(url);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -185,7 +186,9 @@ public class ElementLocator {
 		Map<String, String> urlMap = rReader.getWebsiteNames();
 		for (String websiteKey : urlMap.keySet()) {
 			openPage(urlMap.get(websiteKey));
-			writer.writeToFile(websiteKey,getLocator(this.dDriver));
+			writer.writeToFile(this.dDriver.getTitle().isEmpty() ? 
+					websiteKey : this.dDriver.getTitle().replaceAll("[^\\w\\s]", "").replaceAll("\\s", ""),
+					getLocator(this.dDriver));
 		}
 		if(this.dDriver != null)
 			dDriver.quit();
