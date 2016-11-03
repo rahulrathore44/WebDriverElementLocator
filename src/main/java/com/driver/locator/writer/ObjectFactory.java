@@ -1,5 +1,6 @@
 package com.driver.locator.writer;
 
+import com.driver.locator.pageobject.PageObjectGenerator;
 import com.driver.locator.writer.gson.JsonFileWrite;
 
 public class ObjectFactory {
@@ -14,6 +15,9 @@ public class ObjectFactory {
 			
 		case Json:
 			return new JsonFileWrite();
+			
+		case POM:
+			return new PageObjectGenerator();
 		}
 		throw new RuntimeException("Cannot create Object");
 	}
