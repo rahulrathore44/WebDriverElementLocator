@@ -7,7 +7,7 @@ public class MainClass {
 	public static void main(String[] args) {
 		ElementLocator locator = new ElementLocator();
 		try {
-			locator.writeToFile(FileType.Csv);
+			locator.writeToFile(FileType.POM);
 			System.out.println("DONE");
 		} catch (Exception e) {
 			e.printStackTrace();

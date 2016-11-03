@@ -27,7 +27,7 @@ public class PageObjectGenerator implements FileWrite {
 			.append("\t");
 		
 		if(!"How.XPATH".equalsIgnoreCase(how)){
-			build.append("public WebElement " + using +";")
+			build.append("public WebElement " + using.replaceAll("[^\\w\\s]", "") +";")
 			.append("\n");
 			return new String(build);
 		}
