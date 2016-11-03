@@ -5,6 +5,8 @@ Automated approach to extract object properties. The script extracts the web ele
 By going to each page and validating the locator is unique or not.
 If the locator is unique then it is saved in Csv/Excel/Json file.
 
+It also generate the Page Object Model class file
+
 ### List of Urls must be specified in the config.properties file:
 
 ```java
@@ -18,6 +20,11 @@ If the locator is unique then it is saved in Csv/Excel/Json file.
 `mvn clean generate-sources install`
 
 ### The script create the Csv/Excel/Json file with name as key from config.properties 
+
+`Page Object Model Class File`
+
+![Pom]
+(https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/pageobj.PNG) 
 
 `Comma separated file`
 
@@ -33,4 +40,5 @@ If the locator is unique then it is saved in Csv/Excel/Json file.
 
 ![Json]
 (https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/Json.PNG) 
+
 
