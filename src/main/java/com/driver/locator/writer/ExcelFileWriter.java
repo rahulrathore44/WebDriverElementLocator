@@ -31,7 +31,12 @@ public class ExcelFileWriter implements FileWrite {
 				row.createCell(0).setCellValue(model.getLocatorType());
 				row.createCell(1).setCellValue(model.getLocatorValue());
 			}
-			book.write(new FileOutputStream(new File(ResourceHelper.getResourcePath("excel/") + fileName + ".xlsx")));
+			File file = new File(ResourceHelper.getResourcePath("excel/"));
+			if(!file.isDirectory()){
+				file.mkdir();
+			}
+			file = new File(ResourceHelper.getResourcePath("excel/") + fileName + ".xlsx");
+			book.write(new FileOutputStream(file));
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

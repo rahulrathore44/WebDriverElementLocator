@@ -58,7 +58,14 @@ public class PageObjectGenerator implements FileWrite {
 	public boolean writeToFile(String fileName, List<LocatorModel> dData) {
 		
 		count = 1;
-		File file = new File(ResourceHelper.getResourcePath("pageobject/") + fileName + ".java");
+		File file = new File(ResourceHelper.getResourcePath("pageobject/"));
+		
+		if(!file.isDirectory()){
+			file.mkdir();
+		}
+		
+		file = new File(ResourceHelper.getResourcePath("pageobject/") + fileName + ".java");
+		
 		if(!file.exists())
 			try {
 				file.createNewFile();

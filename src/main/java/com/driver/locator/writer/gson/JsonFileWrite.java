@@ -17,6 +17,12 @@ public class JsonFileWrite implements FileWrite {
 		GsonBuilder builder = new GsonBuilder();
 		builder.setPrettyPrinting();
 		Gson gson = builder.create();
+		
+		File file = new File(ResourceHelper.getResourcePath("json/"));
+		if(!file.isDirectory()){
+			file.mkdir();
+		}
+		
 		try(PrintWriter out = new PrintWriter(new File(ResourceHelper.getResourcePath("json/") + fileName + ".json"))) {
 			String str = gson.toJson(dData,ArrayList.class).replace("\\u0027", "'").replace("\\u003d", "=");
 			out.write(str);
