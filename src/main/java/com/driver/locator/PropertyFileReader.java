@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.driver.locator.utility.ResourceHelper;
+import com.driver.locator.writer.FileType;
 
 public class PropertyFileReader {
 	
@@ -44,8 +45,13 @@ public class PropertyFileReader {
 		Map<String, String> urlMap = new LinkedHashMap<String, String>();
 		while (keys.hasMoreElements()) {
 			Object object = (Object) keys.nextElement();
-			urlMap.put(object.toString(), aProperty.getProperty(object.toString()));
+			if(object.toString().contains("Website"))
+				urlMap.put(object.toString(), aProperty.getProperty(object.toString()));
 		}
 		return urlMap;
+	}
+	
+	public FileType	getFileType() {
+		return FileType.valueOf(aProperty.getProperty("Type"));
 	}
 }
