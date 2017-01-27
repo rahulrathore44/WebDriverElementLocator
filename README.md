@@ -13,6 +13,9 @@ It also generate the Page Object Model class file
     Website1=https://www.linkedin.com/
     Website2=http://automationpractice.com/index.php
     Website3=http://newtours.demoaut.com/
+    
+    #Type - Excel,Csv,Json,POM
+    Type=Json
 ```
 
 ## To see this whole thing running simply checkout this project and run this command:
