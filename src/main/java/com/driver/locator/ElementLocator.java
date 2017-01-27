@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.jsoup.Jsoup;
@@ -27,7 +26,6 @@ import com.driver.locator.writer.ObjectFactory;
 
 public class ElementLocator {
 	
-	private PropertyFileReader rReader;
 	private WebDriver dDriver;
 	private Document dDocument;
 	
@@ -172,7 +170,6 @@ public class ElementLocator {
 	}
 	
 	public ElementLocator() {
-		rReader = new PropertyFileReader();
 		dDriver = new HtmlUnitDriver();
 		dDriver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
 	}
@@ -181,15 +178,13 @@ public class ElementLocator {
 	 * Generate the locator and write to the file
 	 * @param type
 	 */
-	public void writeToFile(FileType type) {
+	
+	public void writeToFile(FileType type,String website) {
 		FileWrite writer = ObjectFactory.getObject(type);
-		Map<String, String> urlMap = rReader.getWebsiteNames();
-		for (String websiteKey : urlMap.keySet()) {
-			openPage(urlMap.get(websiteKey));
-			writer.writeToFile(this.dDriver.getTitle().isEmpty() ? 
-					websiteKey : this.dDriver.getTitle().replaceAll("[^\\w\\s]", "").replaceAll("\\s", ""),
-					getLocator(this.dDriver));
-		}
+		openPage(website);
+		writer.writeToFile(this.dDriver.getTitle().isEmpty() ? 
+				website : this.dDriver.getTitle().replaceAll("[^\\w\\s]", "").replaceAll("\\s", ""),
+				getLocator(this.dDriver));
 		if(this.dDriver != null)
 			dDriver.quit();
 	}

@@ -1,12 +1,13 @@
 package com.driver.locator;
 
+import com.driver.locator.writer.FileType;
+
 public class MainClass {
 
 	public static void main(String[] args) {
 		ElementLocator locator = new ElementLocator();
-		PropertyFileReader reader = new PropertyFileReader();
 		try {
-			locator.writeToFile(reader.getFileType());
+			locator.writeToFile(FileType.Json,"http://automationpractice.com/index.php");
 			System.out.println("DONE");
 		} catch (Exception e) {
 			e.printStackTrace();
