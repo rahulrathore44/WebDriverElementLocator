@@ -26,22 +26,18 @@ It also generate the Page Object Model class file
 
 ### Page Object Model Class File
 
-![Pom]
-(https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/pageobj.PNG) 
+![Pom](https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/pageobj.PNG) 
 
 ### Comma separated file
 
-![Csv]
-(https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/Csv.PNG)
+![Csv](https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/Csv.PNG)
 
 ### Excel file
 
-![Excel]
-(https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/Excel.PNG)
+![Excel](https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/Excel.PNG)
 
 ### Json file
 
-![Json]
-(https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/Json.PNG) 
+![Json](https://github.com/rahulrathore44/WebDriverElementLocator/blob/master/src/overview/Json.PNG) 
 
 
